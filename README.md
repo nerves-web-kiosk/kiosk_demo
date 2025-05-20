@@ -25,9 +25,30 @@ Then,
 1. Connect micro HDMI cable to your rpi4 and display
 1. Boot it!!
 
-You will see Phoenix LiveDashboard on your display!!!
+We will see Phoenix LiveDashboard on your display!!!
 
-You can change the URL to use `KioskExample.change_url("http://example.com")`
+We can change the URL to use `KioskExample.change_url("http://example.com")`
 on IEx console over SSH.
 
 And there are some functions in `KioskExample` module which lead browser to famous URL. Enjoy!!
+
+## With Raspberry Pi Touch Display2
+
+To change the screen orientation, use the method described below.
+
+1. Create `rootfs_overlay/etc/xdg/weston/weston.ini`
+1. Edit it like following
+
+```
+[output]
+name=DSI-1
+mode=720x1280@60.0
+transform=rotate-270
+```
+
+The transform key can be `rotate-(90|180|270)`.
+
+## More about weston.ini
+
+The original source is available [here](https://gitlab.freedesktop.org/wayland/weston/-/blob/main/man/weston.ini.man),
+but it's not very human-readable. For a more readable version, see [this man page](https://manpages.ubuntu.com/manpages/noble/man5/weston.ini.5.html).
