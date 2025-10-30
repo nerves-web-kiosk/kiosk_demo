@@ -20,9 +20,7 @@ defmodule KioskExample.MixProject do
       aliases: aliases(),
       deps: deps(),
       docs: docs(),
-      releases: [{@app, release()}],
-      preferred_cli_env: %{docs: :docs},
-      preferred_cli_target: %{run: :host, test: :host}
+      releases: [{@app, release()}]
     ]
   end
 
@@ -32,6 +30,10 @@ defmodule KioskExample.MixProject do
       extra_applications: [:logger, :runtime_tools, :os_mon],
       mod: {KioskExample.Application, []}
     ]
+  end
+
+  def cli do
+    [preferred_envs: %{docs: :docs}, preferred_target: %{run: :host, test: :host}]
   end
 
   # Specifies which paths to compile per environment.
