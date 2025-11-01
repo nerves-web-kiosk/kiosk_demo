@@ -6,7 +6,15 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :kiosk_example, KioskExampleWeb.Endpoint,
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true,
+  # Binding to loopback ipv4 address prevents access from other machines.
+  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
+  http: [ip: {0, 0, 0, 0}, port: 4000],
+  check_origin: false,
+  code_reloader: false,
+  debug_errors: true,
+  secret_key_base: "hb/peKNv21ttmBwvr+/YTwyJ4FJUJzsyteDrKT16A/4WFRm16GuOBd3rYa2KpGNk"
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: KioskExample.Finch

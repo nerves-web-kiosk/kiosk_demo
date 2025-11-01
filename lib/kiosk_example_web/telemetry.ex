@@ -43,12 +43,36 @@ defmodule KioskExampleWeb.Telemetry do
       summary("phoenix.socket_connected.duration",
         unit: {:native, :millisecond}
       ),
+      sum("phoenix.socket_drain.count"),
       summary("phoenix.channel_joined.duration",
         unit: {:native, :millisecond}
       ),
       summary("phoenix.channel_handled_in.duration",
         tags: [:event],
         unit: {:native, :millisecond}
+      ),
+
+      # Database Metrics
+      summary("kiosk_example.repo.query.total_time",
+        unit: {:native, :millisecond},
+        description: "The sum of the other measurements"
+      ),
+      summary("kiosk_example.repo.query.decode_time",
+        unit: {:native, :millisecond},
+        description: "The time spent decoding the data received from the database"
+      ),
+      summary("kiosk_example.repo.query.query_time",
+        unit: {:native, :millisecond},
+        description: "The time spent executing the query"
+      ),
+      summary("kiosk_example.repo.query.queue_time",
+        unit: {:native, :millisecond},
+        description: "The time spent waiting for a database connection"
+      ),
+      summary("kiosk_example.repo.query.idle_time",
+        unit: {:native, :millisecond},
+        description:
+          "The time the connection spent waiting before being checked out for the query"
       ),
 
       # VM Metrics
