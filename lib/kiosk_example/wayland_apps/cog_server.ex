@@ -30,7 +30,7 @@ defmodule KioskExample.WaylandApps.CogServer do
     Process.flag(:trap_exit, true)
 
     cog_args =
-      Keyword.get(args, :cog_args, "--platform=wl http://localhost:4000/dev/dashboard/home")
+      Keyword.get(args, :cog_args, "--platform=wl http://localhost:4000/")
 
     cog_env =
       Keyword.get(args, :cog_env, [{"XDG_RUNTIME_DIR", "/run"}, {"WAYLAND_DISPLAY", "wayland-1"}])
