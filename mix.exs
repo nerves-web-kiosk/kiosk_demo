@@ -21,7 +21,7 @@ defmodule KioskExample.MixProject do
       deps: deps(),
       docs: docs(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
-      listeners: [Phoenix.CodeReloader],
+      listeners: listeners(Mix.target(), Mix.env()),
       releases: [{@app, release()}]
     ]
   end
@@ -149,4 +149,7 @@ defmodule KioskExample.MixProject do
       ]
     ]
   end
+
+  defp listeners(:host, :dev), do: [Phoenix.CodeReloader]
+  defp listeners(_, _), do: []
 end
