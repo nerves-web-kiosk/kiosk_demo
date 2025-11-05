@@ -179,10 +179,12 @@ workflows:
             tags:
               only: /.*/
       - build_rpi5:
+          context: org-global
           filters:
             tags:
               only: /.*/
       - build_rpi4:
+          context: org-global
           filters:
             tags:
               only: /.*/
@@ -191,6 +193,7 @@ workflows:
             tags:
               only: /.*/
       - deploy:
+          context: org-global
           requires:
             - build_host
             - build_rpi5
