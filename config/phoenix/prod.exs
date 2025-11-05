@@ -6,7 +6,9 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :kiosk_example, KioskExampleWeb.Endpoint,
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  # cache_static_manifest is unnecessary for kiosk_example.
+  # Page update is delivered through a firmware update, which makes the device reboot.
+  # cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
