@@ -26,8 +26,8 @@ config :nerves, :erlinit, update_clock: true
 
 config :nerves_ssh,
   daemon_option_overrides: [
-    {:pwdfun, &KioskExample.ssh_check_pass/2},
-    {:auth_method_kb_interactive_data, &KioskExample.ssh_show_prompt/3}
+    pwdfun: {KioskExample, :ssh_check_pass, 2},
+    auth_method_kb_interactive_data: {KioskExample, :ssh_show_prompt, 3}
   ]
 
 # Common VintageNet configuration
