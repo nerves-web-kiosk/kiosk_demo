@@ -28,7 +28,5 @@ import_config "phoenix/config.exs"
 if Mix.target() == :host do
   import_config "host.exs"
 else
-  config :kiosk_example, KioskExampleWeb.Endpoint, server: true
-
   import_config "target.exs"
 end
