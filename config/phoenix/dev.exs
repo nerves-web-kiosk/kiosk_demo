@@ -47,10 +47,9 @@ config :kiosk_example, KioskExampleWeb.Endpoint,
 config :kiosk_example, KioskExampleWeb.Endpoint,
   live_reload: [
     patterns: [
-      # Temporarily disable until there's an alterative for OTP 28
-      #      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
-      #      ~r"priv/gettext/.*(po)$",
-      #      ~r"lib/kiosk_example_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$"E,
+      ~r"priv/gettext/.*(po)$"E,
+      ~r"lib/kiosk_example_web/(controllers|live|components)/.*(ex|heex)$"E
     ]
   ]
 
