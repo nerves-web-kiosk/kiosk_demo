@@ -5,7 +5,7 @@ path = [
  ".circleci/config.yml",
  ".credo.exs",
  ".formatter.exs",
- ".github/dependabot.yml",
+ ".github/**",
  ".gitignore",
  ".tool-versions",
  "assets/**",
