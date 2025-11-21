@@ -52,4 +52,10 @@ config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{config_env()}.exs"
+if Mix.target() == :host do
+  import_config "#{config_env()}.exs"
+else
+  # Phoenix files are in a read-only partition on targets, so always use the
+  # prod configuration.
+  import_config "prod.exs"
+end
