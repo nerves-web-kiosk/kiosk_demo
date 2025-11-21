@@ -5,8 +5,12 @@ defmodule KioskExample.Application do
 
   use Application
 
+  alias Nerves.Runtime.KV
+
   @impl Application
   def start(_type, _args) do
+    setup_wifi()
+
     children =
       [
         # Children for all targets
@@ -65,5 +69,41 @@ defmodule KioskExample.Application do
       # Start to serve requests, typically the last entry
       KioskExampleWeb.Endpoint
     ]
+  end
+
+  if Mix.target() == :host do
+    defp setup_wifi() do
+      :ok
+    end
+  else
+    defp setup_wifi() do
+      kv = KV.get_all()
+
+      if true?(kv["wifi_force"]) or not wlan0_configured?() do
+        ssid = kv["wifi_ssid"]
+        passphrase = kv["wifi_passphrase"]
+
+        if not empty?(ssid) do
+          _ = VintageNetWiFi.quick_configure(ssid, passphrase)
+          :ok
+        end
+      end
+    end
+
+    defp wlan0_configured?() do
+      VintageNet.get_configuration("wlan0") |> VintageNetWiFi.network_configured?()
+    catch
+      _, _ -> false
+    end
+
+    defp true?(""), do: false
+    defp true?(nil), do: false
+    defp true?("false"), do: false
+    defp true?("FALSE"), do: false
+    defp true?(_), do: true
+
+    defp empty?(""), do: true
+    defp empty?(nil), do: true
+    defp empty?(_), do: false
   end
 end

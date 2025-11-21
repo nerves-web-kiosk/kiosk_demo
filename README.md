@@ -19,10 +19,21 @@ mix firmware
 mix burn
 ```
 
+If you want WiFi credentials to be written to the MicroSD card, initialize the
+MicroSD card like this instead:
+
+```sh
+NERVES_WIFI_SSID='access_point' NERVES_WIFI_PASSPHRASE='passphrase' mix burn
+```
+
+You can still change the WiFi credentials at runtime using
+`VintageNetWiFi.quick_configure/2`, but this helps when you don't have an easy
+alternative way of accessing the device to configure WiFi.
+
 Then,
 
-1. Insert SD to your rpi4
-1. Connect micro HDMI cable to your rpi4 and display
+1. Insert the MicroSD to your Raspberry Pi 4 or 5
+1. Connect your Pi and a display
 1. Boot it!!
 
 We will see Phoenix LiveDashboard on your display!!!
