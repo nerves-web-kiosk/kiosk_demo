@@ -18,12 +18,6 @@ config :kiosk_example, KioskExampleWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "hb/peKNv21ttmBwvr+/YTwyJ4FJUJzsyteDrKT16A/4WFRm16GuOBd3rYa2KpGNk"
 
-# Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: KioskExample.Finch
-
-# Disable Swoosh Local Memory Storage
-config :swoosh, local: false
-
 # Do not print debug messages in production
 config :logger, level: :info
 

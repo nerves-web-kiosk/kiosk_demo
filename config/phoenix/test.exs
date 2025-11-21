@@ -7,12 +7,6 @@ config :kiosk_example, KioskExampleWeb.Endpoint,
   secret_key_base: "KDWBC8aVVr1IAe0UrtLkujZs2LNHZupBGAHNNkJc/Uk9exEmtN0wGtML4nZAVndA",
   server: false
 
-# In test we don't send emails
-config :kiosk_example, KioskExample.Mailer, adapter: Swoosh.Adapters.Test
-
-# Disable swoosh api client as it is only required for production adapters
-config :swoosh, :api_client, false
-
 # Print only warnings and errors during test
 config :logger, level: :warning
 
