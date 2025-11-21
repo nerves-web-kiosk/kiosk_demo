@@ -70,18 +70,6 @@ defmodule KioskExampleWeb.HomeLive do
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="rounded-box bg-base-100 p-4">
                 <div class="flex items-center gap-2 mb-2">
-                  <.icon name="hero-computer-desktop" class="size-6 text-primary" />
-                  <p class="font-semibold">SSH access</p>
-                </div>
-                <p class="mt-2 text-sm text-base-content/80">You can open an IEx prompt via SSH:</p>
-                <pre class="mt-2 bg-base-200 p-2 rounded text-sm"><code>ssh kiosk@{(@hostname || "nerves-xxxx")}.local</code></pre>
-                <p class="mt-2 text-sm text-base-content/70">
-                  Default password: <strong>kiosk</strong>
-                </p>
-              </div>
-
-              <div class="rounded-box bg-base-100 p-4">
-                <div class="flex items-center gap-2 mb-2">
                   <.icon name="hero-chart-bar" class="size-6 text-primary" />
                   <p class="font-semibold">Phoenix LiveDashboard</p>
                 </div>
@@ -93,27 +81,25 @@ defmodule KioskExampleWeb.HomeLive do
 
               <div class="rounded-box bg-base-100 p-4">
                 <div class="flex items-center gap-2 mb-2">
-                  <.icon name="hero-information-circle" class="size-6 text-primary" />
-                  <p class="font-semibold">More information</p>
+                  <.icon name="hero-bolt" class="size-6 text-primary" />
+                  <p class="font-semibold">GPIO Example</p>
                 </div>
                 <p class="mt-2 text-sm text-base-content/80">
-                  Source code, issues, and support can be found at the GitHub repository page:
+                  Control and monitor GPIO pins:
                 </p>
-                <a
-                  href="https://github.com/nerves-web-kiosk/kiosk_example"
-                  class="link link-primary text-sm break-all"
-                >
-                  https://github.com/nerves-web-kiosk/kiosk_example
-                </a>
-                <div class="mt-3 flex justify-center">
-                  <img
-                    alt="QR code for source repository"
-                    src={~p"/images/qr_source.png"}
-                    width="180"
-                    height="180"
-                    class="rounded"
-                  />
+                <a href="/gpio" class="btn btn-sm btn-primary mt-3">Open GPIO Example</a>
+              </div>
+
+              <div class="rounded-box bg-base-100 p-4">
+                <div class="flex items-center gap-2 mb-2">
+                  <.icon name="hero-computer-desktop" class="size-6 text-primary" />
+                  <p class="font-semibold">SSH access</p>
                 </div>
+                <p class="mt-2 text-sm text-base-content/80">You can open an IEx prompt via SSH:</p>
+                <pre class="mt-2 bg-base-200 p-2 rounded text-sm"><code>ssh kiosk@{(@hostname || "nerves-xxxx")}.local</code></pre>
+                <p class="mt-2 text-sm text-base-content/70">
+                  Default password: <strong>kiosk</strong>
+                </p>
               </div>
 
               <div class="rounded-box bg-base-100 p-4">
@@ -152,6 +138,31 @@ defmodule KioskExampleWeb.HomeLive do
                       </tr>
                     </tbody>
                   </table>
+                </div>
+              </div>
+
+              <div class="rounded-box bg-base-100 p-4">
+                <div class="flex items-center gap-2 mb-2">
+                  <.icon name="hero-information-circle" class="size-6 text-primary" />
+                  <p class="font-semibold">More information</p>
+                </div>
+                <p class="mt-2 text-sm text-base-content/80">
+                  Source code, issues, and support can be found at the GitHub repository page:
+                </p>
+                <a
+                  href="https://github.com/nerves-web-kiosk/kiosk_example"
+                  class="link link-primary text-sm break-all"
+                >
+                  https://github.com/nerves-web-kiosk/kiosk_example
+                </a>
+                <div class="mt-3 flex justify-center">
+                  <img
+                    alt="QR code for source repository"
+                    src={~p"/images/qr_source.png"}
+                    width="180"
+                    height="180"
+                    class="rounded"
+                  />
                 </div>
               </div>
             </div>
