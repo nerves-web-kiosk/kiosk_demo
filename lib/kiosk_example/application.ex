@@ -58,8 +58,6 @@ defmodule KioskExample.Application do
       KioskExampleWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:kiosk_example, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: KioskExample.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: KioskExample.Finch},
       # Start a worker by calling: KioskExample.Worker.start_link(arg)
       # {KioskExample.Worker, arg},
       # Start to serve requests, typically the last entry
