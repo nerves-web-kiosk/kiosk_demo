@@ -52,7 +52,7 @@ defmodule KioskExample.Application do
 
     defp start_node() do
       {_, 0} = System.cmd("epmd", ~w"-daemon")
-      {:ok, _pid} = Node.start(:"kiosk_example@nerves.local")
+      _ = Node.start(:"kiosk_example@nerves.local")
       Node.set_cookie(Application.get_env(:mix_tasks_upload_hotswap, :cookie))
     end
   end
