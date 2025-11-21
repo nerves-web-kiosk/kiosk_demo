@@ -9,17 +9,35 @@ defmodule KioskExampleWeb.GPIOLive do
 
   def render(assigns) do
     ~H"""
-    <div class="grid grid-rows-10 grid-flow-col gap-4">
-      <%= for %{label: label} <- enumerate_gpio() do %>
-        <button
-          id={"gpio-button-#{label}"}
-          class={["p-3 rounded-md", bg_color(Map.get(@gpios, label))]}
-          phx-click="push"
-          value={label}
-        >
-          {label}
-        </button>
-      <% end %>
+    <div class="h-screen flex flex-col">
+      <div class="bg-base-200 border-b border-base-300 px-4 py-3 flex items-center gap-3">
+        <a href="/" class="btn btn-sm btn-primary gap-2">
+          <.icon name="hero-home" class="size-4" /> Home
+        </a>
+        <span class="text-lg font-semibold">GPIO Control</span>
+      </div>
+
+      <div class="px-4 py-4">
+        <div class="bg-base-200 rounded-box p-4 mb-4">
+          <p class="text-sm text-base-content/80">
+            Click on any GPIO button below to toggle its state between low (gray) and high (amber).
+            This allows you to control GPIO pins on your device.
+          </p>
+        </div>
+
+        <div class="grid grid-rows-10 grid-flow-col gap-4">
+          <%= for %{label: label} <- enumerate_gpio() do %>
+            <button
+              id={"gpio-button-#{label}"}
+              class={["p-3 rounded-md", bg_color(Map.get(@gpios, label))]}
+              phx-click="push"
+              value={label}
+            >
+              {label}
+            </button>
+          <% end %>
+        </div>
+      </div>
     </div>
     """
   end
