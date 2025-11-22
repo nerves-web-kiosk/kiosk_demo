@@ -7,7 +7,7 @@ export const Screensaver = {
     this.logo = document.getElementById('screensaver-logo');
 
     if (!this.logo) {
-      setTimeout(() => this.initializeScreensaver(), 50);
+      this.initTimeout = setTimeout(() => this.initializeScreensaver(), 50);
       return;
     }
 
@@ -70,6 +70,9 @@ export const Screensaver = {
   },
 
   destroyed() {
+    if (this.initTimeout) {
+      clearTimeout(this.initTimeout);
+    }
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
     }
