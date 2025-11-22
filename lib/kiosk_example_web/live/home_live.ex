@@ -50,39 +50,15 @@ defmodule KioskExampleWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <style>
-      @keyframes gradient-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-
-      @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-      }
-
-      @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-        50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
-      }
-
-      .gradient-bg {
-        background: linear-gradient(-45deg, #6366f1, #8b5cf6, #ec4899, #f59e0b);
-        background-size: 400% 400%;
-        animation: gradient-shift 15s ease infinite;
-      }
-
       .card-hover {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.2s ease-out;
       }
 
       .card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transform: translateY(-2px);
       }
 
       .icon-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 12px;
         padding: 8px;
         display: inline-flex;
@@ -91,40 +67,36 @@ defmodule KioskExampleWeb.HomeLive do
       }
 
       .icon-container.dashboard {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        background-color: #f5576c;
       }
 
       .icon-container.gpio {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        background-color: #00d4ff;
       }
 
       .icon-container.ssh {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        background-color: #38f9d7;
       }
 
       .icon-container.system {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        background-color: #ff9a56;
       }
 
       .icon-container.info {
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-      }
-
-      .badge-glow {
-        animation: pulse-glow 2s ease-in-out infinite;
+        background-color: #66d9ef;
       }
     </style>
 
     <div
       {screensaver_events()}
-      class="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100"
+      class="relative min-h-screen bg-slate-50"
     >
       <.screensaver_overlay :if={@screensaver_active} />
 
       <div class="px-4 py-10 sm:px-6 sm:py-12 lg:px-8 xl:px-28 xl:py-16">
         <div class="mx-auto max-w-6xl">
           <div class="text-center mb-16">
-            <div class="inline-block gradient-bg rounded-3xl px-8 py-12 mb-6 shadow-2xl">
+            <div class="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl px-8 py-12 mb-6 shadow-lg">
               <h1 class="text-5xl font-bold text-white mb-3 tracking-tight">
                 Nerves Web Kiosk
               </h1>
@@ -140,7 +112,7 @@ defmodule KioskExampleWeb.HomeLive do
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="card-hover rounded-2xl bg-white shadow-lg p-6 border border-slate-200">
+            <div class="card-hover rounded-2xl bg-white shadow-md p-6 border border-slate-200">
               <div class="flex items-center gap-3 mb-4">
                 <div class="icon-container dashboard">
                   <.icon name="hero-chart-bar" class="size-6 text-white" />
@@ -153,13 +125,13 @@ defmodule KioskExampleWeb.HomeLive do
               </p>
               <a
                 href="/dashboard"
-                class="btn btn-primary mt-4 w-full shadow-md hover:shadow-lg transition-shadow"
+                class="btn btn-primary mt-4 w-full"
               >
                 <.icon name="hero-arrow-right" class="size-5" /> Open Dashboard
               </a>
             </div>
 
-            <div class="card-hover rounded-2xl bg-white shadow-lg p-6 border border-slate-200">
+            <div class="card-hover rounded-2xl bg-white shadow-md p-6 border border-slate-200">
               <div class="flex items-center gap-3 mb-4">
                 <div class="icon-container gpio">
                   <.icon name="hero-bolt" class="size-6 text-white" />
@@ -172,13 +144,13 @@ defmodule KioskExampleWeb.HomeLive do
               </p>
               <a
                 href="/gpio"
-                class="btn btn-primary mt-4 w-full shadow-md hover:shadow-lg transition-shadow"
+                class="btn btn-primary mt-4 w-full"
               >
                 <.icon name="hero-arrow-right" class="size-5" /> Open GPIO Control
               </a>
             </div>
 
-            <div class="card-hover rounded-2xl bg-white shadow-lg p-6 border border-slate-200">
+            <div class="card-hover rounded-2xl bg-white shadow-md p-6 border border-slate-200">
               <div class="flex items-center gap-3 mb-4">
                 <div class="icon-container ssh">
                   <.icon name="hero-computer-desktop" class="size-6 text-white" />
@@ -188,7 +160,7 @@ defmodule KioskExampleWeb.HomeLive do
               <p class="mt-3 text-slate-600 mb-4 leading-relaxed">
                 Connect via SSH to access an IEx shell for debugging and system management:
               </p>
-              <pre class="bg-slate-900 text-green-400 p-4 rounded-lg text-sm font-mono shadow-inner"><code>ssh kiosk@{(@hostname || "nerves-xxxx")}.local</code></pre>
+              <pre class="bg-slate-900 text-green-400 p-4 rounded-lg text-sm font-mono"><code>ssh kiosk@{(@hostname || "nerves-xxxx")}.local</code></pre>
               <div class="mt-4 bg-slate-50 p-3 rounded-lg border border-slate-200">
                 <p class="text-sm text-slate-600">
                   Default password:
@@ -197,7 +169,7 @@ defmodule KioskExampleWeb.HomeLive do
               </div>
             </div>
 
-            <div class="card-hover rounded-2xl bg-white shadow-lg p-6 border border-slate-200">
+            <div class="card-hover rounded-2xl bg-white shadow-md p-6 border border-slate-200">
               <div class="flex items-center gap-3 mb-4">
                 <div class="icon-container system">
                   <.icon name="hero-cpu-chip" class="size-6 text-white" />
@@ -207,27 +179,27 @@ defmodule KioskExampleWeb.HomeLive do
               <div class="mt-4">
                 <table class="w-full text-sm">
                   <tbody class="divide-y divide-slate-200">
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50">
                       <td class="py-3 pr-4 font-semibold text-slate-700">Serial Number</td>
                       <td class="py-3 text-slate-900 break-all font-mono text-xs">
                         {@system_info.serial_number}
                       </td>
                     </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50">
                       <td class="py-3 pr-4 font-semibold text-slate-700">Architecture</td>
                       <td class="py-3 text-slate-900">
                         {@system_info.firmware.architecture}
                       </td>
                     </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50">
                       <td class="py-3 pr-4 font-semibold text-slate-700">Platform</td>
                       <td class="py-3 text-slate-900">{@system_info.firmware.platform}</td>
                     </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50">
                       <td class="py-3 pr-4 font-semibold text-slate-700">Version</td>
                       <td class="py-3 text-slate-900">{@system_info.firmware.version}</td>
                     </tr>
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50">
                       <td class="py-3 pr-4 font-semibold text-slate-700">Description</td>
                       <td class="py-3 text-slate-900">
                         {@system_info.firmware.description}
@@ -238,7 +210,7 @@ defmodule KioskExampleWeb.HomeLive do
               </div>
             </div>
 
-            <div class="card-hover rounded-2xl bg-white shadow-lg p-6 border border-slate-200 md:col-span-2">
+            <div class="card-hover rounded-2xl bg-white shadow-md p-6 border border-slate-200 md:col-span-2">
               <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
                 <div class="flex-1">
                   <div class="flex items-center gap-3 mb-4">
@@ -254,14 +226,14 @@ defmodule KioskExampleWeb.HomeLive do
                   <a
                     href="https://github.com/nerves-web-kiosk/kiosk_example"
                     target="_blank"
-                    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                   >
                     <.icon name="hero-arrow-top-right-on-square" class="size-5" />
                     github.com/nerves-web-kiosk/kiosk_example
                   </a>
                 </div>
                 <div class="flex justify-center md:justify-end">
-                  <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200 shadow-inner">
+                  <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200">
                     <img
                       alt="QR code for source repository"
                       src={~p"/images/qr_source.png"}
