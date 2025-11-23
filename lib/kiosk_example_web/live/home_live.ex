@@ -7,8 +7,14 @@ defmodule KioskExampleWeb.HomeLive do
 
     system_info = %{
       serial_number: get_serial_number(),
-      firmware: get_firmware_info()
+      firmware: get_firmware_info(),
+      ip_addresses: get_ip_addresses()
     }
+
+    if connected?(socket) do
+      _ = Process.send_after(self(), :refresh_ip_addresses, 10_000)
+      :ok
+    end
 
     socket =
       socket
@@ -45,6 +51,36 @@ defmodule KioskExampleWeb.HomeLive do
         version: "0.0.0"
       }
     end
+  end
+
+  # It's easier to use VintageNet, but this is available on host
+  defp get_ip_addresses() do
+    {:ok, interfaces} = :inet.getifaddrs()
+
+    interfaces
+    |> Enum.filter(&good_ifname/1)
+    |> Enum.flat_map(fn
+      {name, opts} ->
+        ifname = to_string(name)
+        Enum.flat_map(opts, &extract_address(ifname, &1))
+    end)
+  end
+
+  defp good_ifname({~c"lo" ++ _, _opts}), do: false
+  defp good_ifname({~c"utun" ++ _, _opts}), do: false
+  defp good_ifname({~c"veth" ++ _, _opts}), do: false
+  defp good_ifname({~c"br" ++ _, _opts}), do: false
+  defp good_ifname(_anything_else), do: true
+
+  defp extract_address(ifname, {:addr, addr}),
+    do: [%{interface: ifname, address: :inet.ntoa(addr) |> to_string()}]
+
+  defp extract_address(_ifname, _), do: []
+
+  def handle_info(:refresh_ip_addresses, socket) do
+    updated_system_info = Map.put(socket.assigns.system_info, :ip_addresses, get_ip_addresses())
+    Process.send_after(self(), :refresh_ip_addresses, 10_000)
+    {:noreply, assign(socket, :system_info, updated_system_info)}
   end
 
   def render(assigns) do
@@ -205,6 +241,23 @@ defmodule KioskExampleWeb.HomeLive do
                         {@system_info.firmware.description}
                       </td>
                     </tr>
+                    <%= if length(@system_info.ip_addresses) > 0 do %>
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-3 pr-4 font-semibold text-slate-700 align-top">IP Addresses</td>
+                        <td class="py-3 text-slate-900">
+                          <div class="space-y-1">
+                            <%= for ip <- @system_info.ip_addresses do %>
+                              <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">
+                                  {ip.address}
+                                </span>
+                                <span class="text-xs text-slate-500">({ip.interface})</span>
+                              </div>
+                            <% end %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
                   </tbody>
                 </table>
               </div>
