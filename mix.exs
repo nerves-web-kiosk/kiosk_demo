@@ -1,9 +1,9 @@
-defmodule KioskExample.MixProject do
+defmodule KioskDemo.MixProject do
   use Mix.Project
 
-  @app :kiosk_example
+  @app :kiosk_demo
   @version "0.1.0"
-  @source_url "https://github.com/nerves-web-kiosk/kiosk_example"
+  @source_url "https://github.com/nerves-web-kiosk/kiosk_demo"
 
   @all_targets [:rpi4, :rpi5]
 
@@ -30,7 +30,7 @@ defmodule KioskExample.MixProject do
   def application do
     [
       extra_applications: [:logger, :runtime_tools, :os_mon, :ssh],
-      mod: {KioskExample.Application, []}
+      mod: {KioskDemo.Application, []}
     ]
   end
 
@@ -139,10 +139,10 @@ defmodule KioskExample.MixProject do
     [
       setup: ["deps.get", "assets.setup", "assets.build"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind kiosk_example", "esbuild kiosk_example"],
+      "assets.build": ["compile", "tailwind kiosk_demo", "esbuild kiosk_demo"],
       "assets.deploy": [
-        "tailwind kiosk_example --minify",
-        "esbuild kiosk_example --minify",
+        "tailwind kiosk_demo --minify",
+        "esbuild kiosk_demo --minify",
         "phx.digest"
       ]
     ]

@@ -1,7 +1,7 @@
-# KioskExample
+# KioskDemo
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-web-kiosk/kiosk_example/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-web-kiosk/kiosk_example/tree/main)
-[![REUSE status](https://api.reuse.software/badge/github.com/nerves-web-kiosk/kiosk_example)](https://api.reuse.software/info/github.com/nerves-web-kiosk/kiosk_example)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-web-kiosk/kiosk_demo/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-web-kiosk/kiosk_demo/tree/main)
+[![REUSE status](https://api.reuse.software/badge/github.com/nerves-web-kiosk/kiosk_demo)](https://api.reuse.software/info/github.com/nerves-web-kiosk/kiosk_demo)
 
 This is the example kiosk application for followings,
 
@@ -11,8 +11,8 @@ This is the example kiosk application for followings,
 ## How to try
 
 ```sh
-git clone https://github.com/nerves-web-kiosk/kiosk_example.git
-cd kiosk_example
+git clone https://github.com/nerves-web-kiosk/kiosk_demo.git
+cd kiosk_demo
 export MIX_TARGET=rpi4
 mix deps.get
 mix firmware
@@ -38,10 +38,10 @@ Then,
 
 We will see Phoenix LiveDashboard on your display!!!
 
-We can change the URL to use `KioskExample.change_url("http://example.com")`
+We can change the URL to use `KioskDemo.change_url("http://example.com")`
 on IEx console over SSH.
 
-And there are some functions in `KioskExample` module which lead browser to famous URL. Enjoy!!
+And there are some functions in `KioskDemo` module which lead browser to famous URL. Enjoy!!
 
 ## With Raspberry Pi Touch Display2
 

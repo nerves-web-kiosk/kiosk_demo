@@ -21,8 +21,8 @@ config :nerves, :firmware,
 config :nerves, source_date_epoch: "1721520436"
 
 config :mix_tasks_upload_hotswap,
-  app_name: :kiosk_example,
-  nodes: [:"kiosk_example@nerves.local"],
+  app_name: :kiosk_demo,
+  nodes: [:"kiosk_demo@nerves.local"],
   cookie: :nerves_is_awesome
 
 import_config "phoenix/config.exs"

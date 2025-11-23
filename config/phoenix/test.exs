@@ -2,7 +2,7 @@ import Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :kiosk_example, KioskExampleWeb.Endpoint,
+config :kiosk_demo, KioskDemoWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "KDWBC8aVVr1IAe0UrtLkujZs2LNHZupBGAHNNkJc/Uk9exEmtN0wGtML4nZAVndA",
   server: false

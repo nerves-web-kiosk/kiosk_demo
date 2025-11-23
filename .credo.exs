@@ -5,7 +5,7 @@
       name: "default",
       files: %{
         included: ["lib/"],
-        excluded: ["lib/kiosk_example_web.ex", "lib/kiosk_example_web/"]
+        excluded: ["lib/kiosk_demo_web.ex", "lib/kiosk_demo_web/"]
       },
       strict: true,
       checks: [

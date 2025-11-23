@@ -101,9 +101,9 @@ build: &build
     - run:
         name: Copy firmware file
         command: |
-          cp _build/*/nerves/images/*.fw ~/deploy/artifacts/kiosk_example_${MIX_TARGET}.fw
-          zip kiosk_example_${MIX_TARGET}.zip kiosk_example.img
-          cp kiosk_example_${MIX_TARGET}.zip ~/deploy/artifacts
+          cp _build/*/nerves/images/*.fw ~/deploy/artifacts/kiosk_demo_${MIX_TARGET}.fw
+          zip kiosk_demo_${MIX_TARGET}.zip kiosk_demo.img
+          cp kiosk_demo_${MIX_TARGET}.zip ~/deploy/artifacts
           cp ./CHANGELOG.md ~/deploy/CHANGELOG.md
     - store_artifacts:
         path: ~/deploy
