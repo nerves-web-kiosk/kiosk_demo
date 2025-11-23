@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.1
+
+* Fixes
+  * Fix firmware release build script
+
 ## v0.2.0
 
 * Changes

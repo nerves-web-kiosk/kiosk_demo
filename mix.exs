@@ -2,7 +2,7 @@ defmodule KioskDemo.MixProject do
   use Mix.Project
 
   @app :kiosk_demo
-  @version "0.2.0"
+  @version "0.2.1"
   @source_url "https://github.com/nerves-web-kiosk/kiosk_demo"
 
   @all_targets [:rpi4, :rpi5]
