@@ -94,6 +94,8 @@ build: &build
     - run:
         name: Create firmware
         command: |
+          mix assets.build
+          mix assets.deploy
           MIX_ENV=prod mix firmware.image
     - run:
           name: Create artifacts dir
