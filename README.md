@@ -15,6 +15,7 @@ git clone https://github.com/nerves-web-kiosk/kiosk_demo.git
 cd kiosk_demo
 export MIX_TARGET=rpi4
 mix deps.get
+mix assets.build
 mix firmware
 mix burn
 ```
