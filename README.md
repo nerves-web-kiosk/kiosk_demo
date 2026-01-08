@@ -1,3 +1,7 @@
+<!--
+  SPDX-FileCopyrightText: None
+  SPDX-License-Identifier: CC0-1.0
+-->
 # KioskDemo
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-web-kiosk/kiosk_demo/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-web-kiosk/kiosk_demo/tree/main)

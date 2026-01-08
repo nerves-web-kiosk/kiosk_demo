@@ -2,21 +2,12 @@ version = 1
 
 [[annotations]]
 path = [
- ".circleci/config.yml",
- ".credo.exs",
- ".formatter.exs",
- ".github/**",
- ".gitignore",
- ".tool-versions",
  "assets/**",
- "CHANGELOG.md",
  "config/**",
  "lib/**",
  "mix.exs",
  "mix.lock",
- "README.md",
  "priv/**",
- "rel/**",
  "rootfs_overlay/**",
  "REUSE.toml",
  "test/**"

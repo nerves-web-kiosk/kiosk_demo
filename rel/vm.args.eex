@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
 ## Customize flags given to the VM: http://erlang.org/doc/man/erl.html
 
 ## Do not set -name or -sname here. Prefer configuring them at runtime
