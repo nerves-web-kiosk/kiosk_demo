@@ -76,8 +76,8 @@ defmodule KioskDemo.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:kiosk_system_rpi4, "~> 0.5.0", runtime: false, targets: :rpi4},
-      {:kiosk_system_rpi5, "~> 0.5.0", runtime: false, targets: :rpi5}
+      {:kiosk_system_rpi4, "~> 0.6.1", runtime: false, targets: :rpi4},
+      {:kiosk_system_rpi5, "~> 0.6.1", runtime: false, targets: :rpi5}
     ] ++ phoenix_deps()
   end
 
