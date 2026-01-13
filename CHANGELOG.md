@@ -4,6 +4,11 @@
 -->
 # Changelog
 
+## v0.2.2
+
+* Changes
+  * Update Nerves systems to 0.6.1 versions
+
 ## v0.2.1
 
 * Fixes
