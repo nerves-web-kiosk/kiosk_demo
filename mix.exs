@@ -65,7 +65,7 @@ defmodule KioskDemo.MixProject do
 
       # Allow Nerves.Runtime on host to support development, testing and CI.
       # See config/host.exs for usage.
-      {:nerves_runtime, "~> 0.13.0"},
+      {:nerves_runtime, "~> 0.13.2"},
 
       # Dependencies for all targets except :host
       {:nerves_pack, "~> 0.7.1", targets: @all_targets},
@@ -76,8 +76,8 @@ defmodule KioskDemo.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:kiosk_system_rpi4, "~> 0.6.1", runtime: false, targets: :rpi4},
-      {:kiosk_system_rpi5, "~> 0.6.1", runtime: false, targets: :rpi5}
+      #{:kiosk_system_rpi4, "~> 0.6.1", runtime: false, targets: :rpi4},
+      {:kiosk_system_rpi5, "~> 2.0.0-rc.3", runtime: false, targets: :rpi5}
     ] ++ phoenix_deps()
   end
 
