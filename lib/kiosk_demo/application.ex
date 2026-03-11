@@ -40,13 +40,12 @@ defmodule KioskDemo.Application do
       |> Keyword.put(:watchers, [])
       |> then(&Application.put_env(:kiosk_demo, KioskDemoWeb.Endpoint, &1))
 
-      start_node()
-
       [
         # Children for all targets except host
         # Starts a worker by calling: KioskDemo.Worker.start_link(arg)
         # {KioskDemo.Worker, arg},
-        {KioskDemo.DisplaySupervisor, []}
+        {KioskDemo.DisplaySupervisor, []},
+        {Task, &start_node/0}
       ]
     end
 
