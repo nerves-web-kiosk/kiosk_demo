@@ -17,7 +17,35 @@ Wayland compositor (Weston) and browser (Cog). The home screen shows system
 information, IP addresses, and links to a GPIO control page and Phoenix
 LiveDashboard.
 
-## Getting started
+## Getting started with Nerves Burner
+
+The quickest way to try this out is with [Nerves
+Burner](https://github.com/nerves-project/nerves_burner). This downloads a
+pre-built firmware image and writes it to a MicroSD card without needing to
+compile anything.
+
+1. [Install Elixir](https://elixir-lang.org/install.html)
+2. Download Nerves Burner:
+
+   ```sh
+   curl -L -o nerves_burner https://github.com/nerves-project/nerves_burner/releases/latest/download/nerves_burner
+   chmod +x nerves_burner
+   ```
+
+3. Run it and follow the prompts to select Kiosk Demo, your target, and MicroSD
+   card:
+
+   ```sh
+   ./nerves_burner
+   ```
+
+Installing [fwup](https://github.com/fwup-home/fwup#installing) is recommended
+for writing the MicroSD card. On macOS, run `brew install fwup`. If fwup isn't
+available, Nerves Burner will provide alternative instructions.
+
+## Building from source
+
+If you'd like to customize the application or build from source:
 
 ```sh
 git clone https://github.com/nerves-web-kiosk/kiosk_demo.git
