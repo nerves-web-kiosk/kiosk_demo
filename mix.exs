@@ -140,10 +140,12 @@ defmodule KioskDemo.MixProject do
       setup: ["deps.get", "assets.setup", "assets.build"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["compile", "tailwind kiosk_demo", "esbuild kiosk_demo"],
+      # Since we're running a local browser, skip the phx.digest step that adds
+      # the unneeded digested files and gzip variants. Add back if serving
+      # remote clients too.
       "assets.deploy": [
         "tailwind kiosk_demo --minify",
-        "esbuild kiosk_demo --minify",
-        "phx.digest"
+        "esbuild kiosk_demo --minify"
       ]
     ]
   end
