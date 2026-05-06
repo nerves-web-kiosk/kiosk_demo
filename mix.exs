@@ -59,7 +59,7 @@ defmodule KioskDemo.MixProject do
       {:shoehorn, "~> 0.9.1"},
       {:ring_logger, "~> 0.11.0"},
       {:toolshed, "~> 0.4.0"},
-      {:muontrap, "~> 1.0"},
+      {:muontrap, "~> 1.8"},
       {:mix_tasks_upload_hotswap, "~> 0.1.0"},
       {:circuits_gpio, "~> 2.1"},
 

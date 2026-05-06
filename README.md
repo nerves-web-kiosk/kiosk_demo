@@ -81,13 +81,6 @@ Connect over SSH to control the kiosk from the IEx console:
 ssh kiosk@nerves-xxxx.local  # password: "kiosk"
 ```
 
-The `KioskDemo` module provides functions for navigating the browser:
-
-- `KioskDemo.home()` - return to the home page
-- `KioskDemo.gpio()` - open the GPIO control page
-- `KioskDemo.live_dashboard()` - open Phoenix LiveDashboard
-- `KioskDemo.change_url("http://example.com")` - navigate to any URL
-
 ## Host development
 
 You can run the Phoenix web app locally for development without hardware:
