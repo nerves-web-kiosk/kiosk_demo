@@ -79,7 +79,7 @@ defmodule KioskDemo.WaylandApps.CogServer do
     MuonTrap.Daemon.start_link("cog", ~w"#{args}",
       env: env,
       stderr_to_stdout: true,
-      log_output: :debug,
+      log_output: :info,
       log_prefix: "cog: "
     )
     |> then(fn {:ok, pid} -> pid end)
