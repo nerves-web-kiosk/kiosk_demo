@@ -5,7 +5,7 @@ defmodule KioskDemo.MixProject do
   @version "0.3.0"
   @source_url "https://github.com/nerves-web-kiosk/kiosk_demo"
 
-  @all_targets [:rpi4, :rpi5]
+  @all_targets [:rpi4, :rpi5, :qemu_aarch64]
 
   def project do
     [
@@ -77,7 +77,10 @@ defmodule KioskDemo.MixProject do
       # version updates, please review their release notes in case
       # changes to your application are needed.
       {:kiosk_system_rpi4, "~> 2.0", runtime: false, targets: :rpi4},
-      {:kiosk_system_rpi5, "~> 2.0", runtime: false, targets: :rpi5}
+      {:kiosk_system_rpi5, "~> 2.0", runtime: false, targets: :rpi5},
+
+      # Only working on Linux hosts due to OpenGL ES use
+      {:kiosk_system_qemu_aarch64, ">= 0.1.0", runtime: false, targets: :qemu_aarch64}
     ] ++ phoenix_deps()
   end
 
