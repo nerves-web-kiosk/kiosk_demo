@@ -20,6 +20,7 @@ defmodule KioskDemoWeb.Router do
     live "/", HomeLive
     live "/dashboard", DashboardLive
     live "/gpio", GPIOLive
+    get "/loading", LoadingController, :show
   end
 
   # Other scopes may use custom stacks.
