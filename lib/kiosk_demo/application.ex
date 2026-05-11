@@ -44,7 +44,8 @@ defmodule KioskDemo.Application do
         # Children for all targets except host
         # Starts a worker by calling: KioskDemo.Worker.start_link(arg)
         # {KioskDemo.Worker, arg},
-        {KioskDemo.DisplaySupervisor, []},
+        {KioskDemo.UdevdServer, []},
+        {KioskDemo.KioskSupervisor, []},
         {Task, &start_node/0}
       ]
     end

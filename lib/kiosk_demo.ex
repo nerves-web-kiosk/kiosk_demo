@@ -1,11 +1,65 @@
 defmodule KioskDemo do
   @moduledoc """
   Kiosk demo top-level helpers.
-
-  Browser navigation (changing the displayed URL) was previously done by
-  restarting Cog with new command-line arguments. That has been removed —
-  a future change will drive Cog over its D-Bus API instead.
   """
+
+  alias KioskDemo.Cog
+
+  @doc """
+  Go to the main page
+  """
+  @spec home() :: :ok | {:error, term()}
+  def home() do
+    Cog.open_url("http://localhost:4000/")
+  end
+
+  @doc """
+  Go to the gpio page
+  """
+  @spec gpio() :: :ok | {:error, term()}
+  def gpio() do
+    Cog.open_url("http://localhost:4000/gpio")
+  end
+
+  @doc """
+  Go to the Phoenix LiveDashboard
+  """
+  @spec live_dashboard() :: :ok | {:error, term()}
+  def live_dashboard() do
+    Cog.open_url("http://localhost:4000/dev/dashboard/home/")
+  end
+
+  @doc """
+  Go to the Nerves home page
+  """
+  @spec nerves_project_org() :: :ok | {:error, term()}
+  def nerves_project_org() do
+    Cog.open_url("https://nerves-project.org/")
+  end
+
+  @doc """
+  Go to the Phoenix Framework home page
+  """
+  @spec phoenixframework_org() :: :ok | {:error, term()}
+  def phoenixframework_org() do
+    Cog.open_url("https://www.phoenixframework.org/")
+  end
+
+  @doc """
+  Show a jellyfish animation
+  """
+  @spec jellyfish() :: :ok | {:error, term()}
+  def jellyfish() do
+    Cog.open_url("https://akirodic.com/p/jellyfish/")
+  end
+
+  @doc """
+  Change to the specified URL
+  """
+  @spec change_url(String.t()) :: :ok | {:error, term()}
+  def change_url(url) when is_binary(url) do
+    Cog.open_url(url)
+  end
 
   @doc false
   @spec ssh_check_pass(charlist(), charlist()) :: boolean()

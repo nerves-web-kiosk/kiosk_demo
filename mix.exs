@@ -62,6 +62,7 @@ defmodule KioskDemo.MixProject do
       {:muontrap, "~> 1.8"},
       {:mix_tasks_upload_hotswap, "~> 0.1.0"},
       {:circuits_gpio, "~> 2.1"},
+      {:dbus, "~> 0.8"},
 
       # Allow Nerves.Runtime on host to support development, testing and CI.
       # See config/host.exs for usage.
