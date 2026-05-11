@@ -4,8 +4,10 @@ defmodule KioskDemo.KioskSupervisor do
 
   @runtime_dir "/run"
   @wayland_display "wayland-1"
-  @wayland_socket_poll_ms 500
-  @wayland_socket_max_retries 20
+  @poll_ms 500
+  @max_retries 20
+  @drm_dir "/dev/dri"
+  @drm_card_pattern ~r/^card[0-9]$/
   @dbus_socket_path "/run/dbus-session-bus"
   @dbus_session_bus_address "unix:path=#{@dbus_socket_path}"
 
@@ -56,7 +58,8 @@ defmodule KioskDemo.KioskSupervisor do
              env: weston_env,
              stderr_to_stdout: true,
              log_output: :info,
-             log_prefix: "weston: "
+             log_prefix: "weston: ",
+             wait_for: fn -> wait_for_match(@drm_dir, @drm_card_pattern) end
            ]
          ]},
         id: :weston
@@ -107,7 +110,7 @@ defmodule KioskDemo.KioskSupervisor do
     end
   end
 
-  defp wait_for_path(path, retries \\ @wayland_socket_max_retries)
+  defp wait_for_path(path, retries \\ @max_retries)
 
   defp wait_for_path(path, 0),
     do: raise(RuntimeError, "#{path} did not appear in time")
@@ -116,8 +119,29 @@ defmodule KioskDemo.KioskSupervisor do
     if File.exists?(path) do
       :ok
     else
-      Process.sleep(@wayland_socket_poll_ms)
+      Process.sleep(@poll_ms)
       wait_for_path(path, retries - 1)
+    end
+  end
+
+  defp wait_for_match(dir, regex, retries \\ @max_retries)
+
+  defp wait_for_match(dir, regex, 0),
+    do: raise(RuntimeError, "no entry matching #{inspect(regex)} appeared in #{dir}")
+
+  defp wait_for_match(dir, regex, retries) do
+    case File.ls(dir) do
+      {:ok, files} ->
+        if Enum.any?(files, &Regex.match?(regex, &1)) do
+          :ok
+        else
+          Process.sleep(@poll_ms)
+          wait_for_match(dir, regex, retries - 1)
+        end
+
+      {:error, _} ->
+        Process.sleep(@poll_ms)
+        wait_for_match(dir, regex, retries - 1)
     end
   end
 end
