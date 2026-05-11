@@ -116,6 +116,14 @@ transform=rotate-270
 
 The transform key can be `rotate-(90|180|270)`.
 
+If you're looking at this section, but using an HDMI display, copy this instead:
+
+```ini
+[output]
+name=HDMI-A-1
+transform=rotate-270
+```
+
 ## More about weston.ini
 
 The original source is available [here](https://gitlab.freedesktop.org/wayland/weston/-/blob/main/man/weston.ini.man),
