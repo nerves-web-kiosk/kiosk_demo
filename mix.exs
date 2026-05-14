@@ -59,10 +59,9 @@ defmodule KioskDemo.MixProject do
       {:shoehorn, "~> 0.9.1"},
       {:ring_logger, "~> 0.11.0"},
       {:toolshed, "~> 0.4.0"},
-      {:muontrap, "~> 1.8"},
+      {:muontrap, "~> 2.0", path: "~/git/fhunleth/muontrap", override: true},
       {:mix_tasks_upload_hotswap, "~> 0.1.0"},
       {:circuits_gpio, "~> 2.1"},
-      {:dbus, "~> 0.8"},
 
       # Allow Nerves.Runtime on host to support development, testing and CI.
       # See config/host.exs for usage.
@@ -71,6 +70,7 @@ defmodule KioskDemo.MixProject do
       # Dependencies for all targets except :host
       {:nerves_pack, "~> 0.7.1", targets: @all_targets},
       {:nerves_ssh, "~> 1.2", targets: @all_targets},
+      {:nerves_uevent, path: "~/git/nerves-project/nerves_uevent", override: true, targets: @all_targets},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version
@@ -78,7 +78,10 @@ defmodule KioskDemo.MixProject do
       # version updates, please review their release notes in case
       # changes to your application are needed.
       {:kiosk_system_rpi4, "~> 2.0", runtime: false, targets: :rpi4},
-      {:kiosk_system_rpi5, "~> 2.0", runtime: false, targets: :rpi5},
+      {:kiosk_system_rpi5, "~> 2.0",
+       path: "~/nerves/nerves_system_br/o/configs/kiosk_system_rpi5",
+       runtime: false,
+       targets: :rpi5},
 
       # Only working on Linux hosts due to OpenGL ES use
       {:kiosk_system_qemu_aarch64, ">= 0.1.0", runtime: false, targets: :qemu_aarch64}
