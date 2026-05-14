@@ -1,63 +1,36 @@
 defmodule KioskDemo.Cog do
   @moduledoc """
-  D-Bus client for the Cog browser.
+  Control the Cog browser by shelling out to `cogctl`.
 
-  Cog exports an `org.gtk.Actions` action group on the session bus at
-  `com.igalia.Cog` / `/com/igalia/Cog`. Calling
-  `org.gtk.Actions.Activate(name, params, platform_data)` triggers actions
-  registered by `cog-launcher.c`: `open` (URL), `previous`, `next`, `reload`,
-  `quit`.
-
-  See `cogctl(1)` and the source at `launcher/cogctl.c` in the Cog repo.
+  `cogctl` talks to the running Cog instance over the session bus
+  (`com.igalia.Cog` / `/com/igalia/Cog`) and supports `open`, `previous`,
+  `next`, `reload`, `quit`, and `ping`. The session bus address is taken
+  from `DBUS_SESSION_BUS_ADDRESS`, which `KioskDemo.KioskSupervisor` sets
+  on the BEAM before starting any children.
   """
 
-  require Record
-
-  Record.defrecordp(:dbus_variant, :dbus_variant, type: :string, value: "")
-
-  @service "com.igalia.Cog"
-  @path "/com/igalia/Cog"
-  @actions_iface "org.gtk.Actions"
-  @peer_iface "org.freedesktop.DBus.Peer"
-
   @spec open_url(String.t()) :: :ok | {:error, term()}
-  def open_url(url) when is_binary(url) do
-    activate("open", [variant(:string, url)])
-  end
+  def open_url(url) when is_binary(url), do: cogctl(["open", url])
 
   @spec back() :: :ok | {:error, term()}
-  def back(), do: activate("previous", [])
+  def back(), do: cogctl(["previous"])
 
   @spec forward() :: :ok | {:error, term()}
-  def forward(), do: activate("next", [])
+  def forward(), do: cogctl(["next"])
 
   @spec reload() :: :ok | {:error, term()}
-  def reload(), do: activate("reload", [])
+  def reload(), do: cogctl(["reload"])
 
   @spec quit() :: :ok | {:error, term()}
-  def quit(), do: activate("quit", [])
+  def quit(), do: cogctl(["quit"])
 
   @spec ping() :: :ok | {:error, term()}
-  def ping(), do: call(@peer_iface, "Ping", [])
+  def ping(), do: cogctl(["ping"])
 
-  defp activate(action_name, params) when is_binary(action_name) and is_list(params) do
-    call(@actions_iface, "Activate", [action_name, params, %{}])
-  end
-
-  # The bus, service, and object proxies are cached gen_servers — keep them
-  # alive across calls. Releasing the object stops the service, which then
-  # leaves a stale pid in dbus_bus_reg's cache for the next call.
-  defp call(iface_name, method_name, args) do
-    with {:ok, bus} <- :dbus_bus_reg.get_bus(:session),
-         {:ok, service} <- :dbus_bus.get_service(bus, @service),
-         {:ok, proxy} <- :dbus_remote_service.get_object(service, @path) do
-      normalize(:dbus_proxy.call(proxy, iface_name, method_name, args))
+  defp cogctl(args) do
+    case System.cmd("cogctl", args, stderr_to_stdout: true) do
+      {_, 0} -> :ok
+      {output, code} -> {:error, {code, output}}
     end
   end
-
-  defp variant(type, value), do: dbus_variant(type: type, value: value)
-
-  defp normalize(:ok), do: :ok
-  defp normalize({:ok, _}), do: :ok
-  defp normalize({:error, _} = err), do: err
 end

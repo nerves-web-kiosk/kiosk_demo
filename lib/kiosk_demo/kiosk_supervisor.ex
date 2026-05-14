@@ -6,8 +6,6 @@ defmodule KioskDemo.KioskSupervisor do
   @wayland_display "wayland-1"
   @poll_ms 500
   @max_retries 20
-  @drm_dir "/dev/dri"
-  @drm_card_pattern ~r/^card[0-9]$/
   @dbus_socket_path "/run/dbus-session-bus"
   @dbus_session_bus_address "unix:path=#{@dbus_socket_path}"
 
@@ -18,17 +16,20 @@ defmodule KioskDemo.KioskSupervisor do
 
   @impl Supervisor
   def init(_args) do
-    configure_dbus_session_bus()
+    cgroup_status = KioskDemo.SystemSetup.setup!()
+    System.put_env("DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address)
 
     weston_env = [{"XDG_RUNTIME_DIR", @runtime_dir}]
 
     cog_env = [
       {"XDG_RUNTIME_DIR", @runtime_dir},
       {"WAYLAND_DISPLAY", @wayland_display},
-      {"DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address}
+      {"DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address},
+      {"HOME", KioskDemo.SystemSetup.cog_home()}
     ]
 
     wayland_socket = Path.join(@runtime_dir, @wayland_display)
+    dbus_config_path = Application.app_dir(:kiosk_demo, "priv/dbus-session.conf")
 
     children = [
       Supervisor.child_spec(
@@ -36,10 +37,8 @@ defmodule KioskDemo.KioskSupervisor do
          [
            "dbus-daemon",
            [
-             "--session",
-             "--address=#{@dbus_session_bus_address}",
-             "--nofork",
-             "--syslog-only"
+             "--config-file=#{dbus_config_path}",
+             "--nofork"
            ],
            [
              name: KioskDemo.DBusDaemon,
@@ -61,7 +60,9 @@ defmodule KioskDemo.KioskSupervisor do
              stderr_to_stdout: true,
              log_output: :info,
              log_prefix: "weston: ",
-             wait_for: fn -> wait_for_match(@drm_dir, @drm_card_pattern) end
+             wait_for: fn ->
+               wait_for_ready_card()
+             end
            ]
          ]},
         id: :weston
@@ -71,16 +72,7 @@ defmodule KioskDemo.KioskSupervisor do
          [
            "cog",
            ["--platform=wl", "http://localhost:4000/"],
-           [
-             env: cog_env,
-             stderr_to_stdout: true,
-             log_output: :info,
-             log_prefix: "cog: ",
-             wait_for: fn ->
-               wait_for_path(@dbus_socket_path)
-               wait_for_path(wayland_socket)
-             end
-           ]
+           cog_opts(cgroup_status, cog_env, wayland_socket)
          ]},
         id: :cog
       )
@@ -89,27 +81,38 @@ defmodule KioskDemo.KioskSupervisor do
     Supervisor.init(children, strategy: :rest_for_one)
   end
 
-  # The :dbus library defaults the EXTERNAL SASL "cookie" to UID 1000; on Nerves
-  # we run as root (UID 0). Also point the BEAM at the socket dbus-daemon is
-  # about to serve on so :dbus clients reach the same bus as cog.
-  defp configure_dbus_session_bus() do
-    System.put_env("DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address)
-    Application.put_env(:dbus, :external_cookie, external_auth_cookie())
-  end
+  defp cog_opts(cgroup_status, cog_env, wayland_socket) do
+    base = [
+      name: KioskDemo.CogDaemon,
+      env: cog_env,
+      stderr_to_stdout: true,
+      log_output: :info,
+      log_prefix: "cog: ",
+      uid: "www-data",
+      gid: "www-data",
+      groups: ["video", "input"],
+      wait_for: fn ->
+        wait_for_socket(@dbus_socket_path)
+        wait_for_socket(wayland_socket)
+      end
+    ]
 
-  defp external_auth_cookie() do
-    uid()
-    |> Integer.to_string()
-    |> Base.encode16(case: :lower)
-  end
-
-  defp uid() do
-    with {:ok, content} <- File.read("/proc/self/status"),
-         [_, uid] <- Regex.run(~r/^Uid:\s+(\d+)/m, content) do
-      String.to_integer(uid)
-    else
-      _ -> 0
+    case cgroup_status do
+      :cgroups -> base ++ cog_cgroup_opts()
+      :no_cgroups -> base
     end
+  end
+
+  defp cog_cgroup_opts() do
+    [
+      cgroup_base: KioskDemo.SystemSetup.parent_cgroup(),
+      cgroup: %{
+        cpu_weight: 50,
+        memory_max: KioskDemo.SystemSetup.cog_memory_limit(),
+        memory_oom_group: true,
+        pids_max: 200
+      }
+    ]
   end
 
   defp wait_for_path(path, retries \\ @max_retries)
@@ -126,24 +129,44 @@ defmodule KioskDemo.KioskSupervisor do
     end
   end
 
-  defp wait_for_match(dir, regex, retries \\ @max_retries)
+  # weston (mode 0700) and dbus-daemon (mode 0600) create their sockets
+  # with restrictive perms. Cog runs as a non-root uid, so loosen them
+  # once they appear.
+  defp wait_for_socket(path) do
+    wait_for_path(path)
+    File.chmod!(path, 0o666)
+  end
 
-  defp wait_for_match(dir, regex, 0),
-    do: raise(RuntimeError, "no entry matching #{inspect(regex)} appeared in #{dir}")
+  defp wait_for_ready_card(retries \\ @max_retries)
 
-  defp wait_for_match(dir, regex, retries) do
-    case File.ls(dir) do
-      {:ok, files} ->
-        if Enum.any?(files, &Regex.match?(regex, &1)) do
-          :ok
-        else
-          Process.sleep(@poll_ms)
-          wait_for_match(dir, regex, retries - 1)
-        end
+  defp wait_for_ready_card(0),
+    do: raise(RuntimeError, "no DRM card became ready in time")
 
-      {:error, _} ->
+  defp wait_for_ready_card(retries) do
+    case find_ready_card() do
+      {:ok, _path} ->
+        :ok
+
+      :not_ready ->
         Process.sleep(@poll_ms)
-        wait_for_match(dir, regex, retries - 1)
+        wait_for_ready_card(retries - 1)
+    end
+  end
+
+  defp find_ready_card() do
+    Path.wildcard("/sys/class/drm/card[0-9]-*")
+    |> Enum.find_value(:not_ready, fn conn ->
+      if connector_ready?(conn) do
+        card = conn |> Path.basename() |> String.split("-", parts: 2) |> hd()
+        {:ok, "/dev/dri/" <> card}
+      end
+    end)
+  end
+
+  defp connector_ready?(conn) do
+    case File.read(Path.join(conn, "status")) do
+      {:ok, s} when s in ["connected\n", "disconnected\n", "unknown\n"] -> true
+      _ -> false
     end
   end
 end
