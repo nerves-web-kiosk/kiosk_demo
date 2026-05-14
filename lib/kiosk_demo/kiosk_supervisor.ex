@@ -42,6 +42,7 @@ defmodule KioskDemo.KioskSupervisor do
              "--syslog-only"
            ],
            [
+             name: KioskDemo.DBusDaemon,
              stderr_to_stdout: true,
              log_output: :info,
              log_prefix: "dbus: "
@@ -55,6 +56,7 @@ defmodule KioskDemo.KioskSupervisor do
            "weston",
            ["--shell=kiosk", "--continue-without-input"],
            [
+             name: KioskDemo.WestonDaemon,
              env: weston_env,
              stderr_to_stdout: true,
              log_output: :info,
