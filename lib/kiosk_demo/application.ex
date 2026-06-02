@@ -1,5 +1,5 @@
 defmodule KioskDemo.Application do
-  # See https://hexdocs.pm/elixir/Application.html
+  # See https://elixir.hexdocs.pm/Application.html
   # for more information on OTP Applications
   @moduledoc false
 
@@ -18,7 +18,7 @@ defmodule KioskDemo.Application do
         # {KioskDemo.Worker, arg},
       ] ++ phoenix_children() ++ children()
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
+    # See https://elixir.hexdocs.pm/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: KioskDemo.Supervisor]
     Supervisor.start_link(children, opts)
