@@ -8,27 +8,58 @@ defmodule KioskDemo.KioskSupervisor do
   @max_retries 20
   @dbus_socket_path "/run/dbus-session-bus"
   @dbus_session_bus_address "unix:path=#{@dbus_socket_path}"
+  @inspector_address "0.0.0.0:9222"
 
   @spec start_link(keyword()) :: Supervisor.on_start()
   def start_link(args) do
     Supervisor.start_link(__MODULE__, args, name: __MODULE__)
   end
 
+  @doc """
+  Enable the WPE WebKit remote inspector and restart Cog.
+
+  Exposes the inspector on `#{@inspector_address}`. Browse to
+  `http://<device>:9222/` from another machine to attach DevTools.
+  Not persisted across reboots.
+  """
+  @spec enable_inspector() :: :ok | {:error, term()}
+  def enable_inspector() do
+    Application.put_env(:kiosk_demo, :remote_inspector, true)
+    restart_cog()
+  end
+
+  @doc """
+  Disable the remote inspector and restart Cog.
+  """
+  @spec disable_inspector() :: :ok | {:error, term()}
+  def disable_inspector() do
+    Application.put_env(:kiosk_demo, :remote_inspector, false)
+    restart_cog()
+  end
+
+  defp restart_cog() do
+    with :ok <- Supervisor.terminate_child(__MODULE__, :cog),
+         :ok <- Supervisor.delete_child(__MODULE__, :cog),
+         {:ok, _pid} <- start_cog() do
+      :ok
+    end
+  end
+
+  defp start_cog() do
+    case Supervisor.start_child(__MODULE__, cog_child_spec()) do
+      {:ok, pid, _info} -> {:ok, pid}
+      other -> other
+    end
+  end
+
   @impl Supervisor
   def init(_args) do
     cgroup_status = KioskDemo.SystemSetup.setup!()
+    :persistent_term.put({__MODULE__, :cgroup_status}, cgroup_status)
     System.put_env("DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address)
 
     weston_env = [{"XDG_RUNTIME_DIR", @runtime_dir}]
 
-    cog_env = [
-      {"XDG_RUNTIME_DIR", @runtime_dir},
-      {"WAYLAND_DISPLAY", @wayland_display},
-      {"DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address},
-      {"HOME", KioskDemo.SystemSetup.cog_home()}
-    ]
-
-    wayland_socket = Path.join(@runtime_dir, @wayland_display)
     dbus_config_path = Application.app_dir(:kiosk_demo, "priv/dbus-session.conf")
 
     children = [
@@ -67,18 +98,40 @@ defmodule KioskDemo.KioskSupervisor do
          ]},
         id: :weston
       ),
-      Supervisor.child_spec(
-        {MuonTrap.Daemon,
-         [
-           "cog",
-           ["--platform=wl", "http://localhost:4000/"],
-           cog_opts(cgroup_status, cog_env, wayland_socket)
-         ]},
-        id: :cog
-      )
+      cog_child_spec()
     ]
 
     Supervisor.init(children, strategy: :rest_for_one)
+  end
+
+  defp cog_child_spec() do
+    cgroup_status = :persistent_term.get({__MODULE__, :cgroup_status})
+    wayland_socket = Path.join(@runtime_dir, @wayland_display)
+
+    Supervisor.child_spec(
+      {MuonTrap.Daemon,
+       [
+         "cog",
+         ["--platform=wl", "http://localhost:4000/"],
+         cog_opts(cgroup_status, build_cog_env(), wayland_socket)
+       ]},
+      id: :cog
+    )
+  end
+
+  defp build_cog_env() do
+    base = [
+      {"XDG_RUNTIME_DIR", @runtime_dir},
+      {"WAYLAND_DISPLAY", @wayland_display},
+      {"DBUS_SESSION_BUS_ADDRESS", @dbus_session_bus_address},
+      {"HOME", KioskDemo.SystemSetup.cog_home()}
+    ]
+
+    if Application.get_env(:kiosk_demo, :remote_inspector, false) do
+      base ++ [{"WEBKIT_INSPECTOR_HTTP_SERVER", @inspector_address}]
+    else
+      base
+    end
   end
 
   defp cog_opts(cgroup_status, cog_env, wayland_socket) do

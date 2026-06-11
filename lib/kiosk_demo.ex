@@ -64,6 +64,21 @@ defmodule KioskDemo do
     Cog.open_url(loading_url)
   end
 
+  @doc """
+  Enable the WPE WebKit remote inspector and restart Cog.
+
+  Browse to `http://<device>:9222/` from another machine to attach
+  DevTools. Not persisted across reboots.
+  """
+  @spec enable_inspector() :: :ok | {:error, term()}
+  def enable_inspector(), do: KioskDemo.KioskSupervisor.enable_inspector()
+
+  @doc """
+  Disable the remote inspector and restart Cog.
+  """
+  @spec disable_inspector() :: :ok | {:error, term()}
+  def disable_inspector(), do: KioskDemo.KioskSupervisor.disable_inspector()
+
   @doc false
   @spec ssh_check_pass(charlist(), charlist()) :: boolean()
   def ssh_check_pass(_provided_username, provided_password) do
