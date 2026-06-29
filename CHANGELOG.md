@@ -4,6 +4,16 @@
 -->
 # Changelog
 
+## v0.4.0
+
+This release brings in quite a few updates and experiments with using D-Bus to
+control Cog rather than relying on restarting it to reset the URL.
+
+* Changes
+  * Update Nerves systems to use OTP 29, GCC 15.3, and Linux 6.18
+  * Fix font rendering when using system fonts
+  * Several supervision tree simplifications
+
 ## v0.3.0
 
 This is a major update to the Nerves systems used for this demo that adjusts the
