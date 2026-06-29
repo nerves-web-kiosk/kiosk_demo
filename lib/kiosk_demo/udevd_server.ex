@@ -2,8 +2,6 @@ defmodule KioskDemo.UdevdServer do
   @moduledoc false
   use GenServer
 
-  require Logger
-
   @spec start_link(keyword()) :: GenServer.on_start()
   def start_link(args), do: GenServer.start_link(__MODULE__, args, name: __MODULE__)
 

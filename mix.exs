@@ -58,7 +58,7 @@ defmodule KioskDemo.MixProject do
       {:nerves, "~> 1.10", runtime: false},
       {:shoehorn, "~> 0.9.1"},
       {:ring_logger, "~> 0.11.0"},
-      {:toolshed, "~> 0.4.0"},
+      {:toolshed, "~> 0.5"},
       {:muontrap, "~> 1.8"},
       {:mix_tasks_upload_hotswap, "~> 0.1.0"},
       {:circuits_gpio, "~> 2.1"},
@@ -77,8 +77,8 @@ defmodule KioskDemo.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:kiosk_system_rpi4, "~> 2.0", runtime: false, targets: :rpi4},
-      {:kiosk_system_rpi5, "~> 2.0", runtime: false, targets: :rpi5},
+      {:kiosk_system_rpi4, "~> 2.1", runtime: false, targets: :rpi4},
+      {:kiosk_system_rpi5, "~> 2.1", runtime: false, targets: :rpi5},
 
       # Only working on Linux hosts due to OpenGL ES use
       {:kiosk_system_qemu_aarch64, ">= 0.1.0", runtime: false, targets: :qemu_aarch64}
