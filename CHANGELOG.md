@@ -4,6 +4,10 @@
 -->
 # Changelog
 
+## v0.4.1
+
+This release include dependency updates and a fix for RPi5 WPA3 SAE users.
+
 ## v0.4.0
 
 This release brings in quite a few updates and experiments with using D-Bus to
