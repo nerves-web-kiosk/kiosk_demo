@@ -1,6 +1,6 @@
 import Config
 
-config :nerves, application_sort: [init: [:nerves_runtime, :nerves_pack]]
+config :nerves, application_sort: [init: [:logger_backends, :nerves_runtime, :nerves_pack]]
 
 config :nerves_runtime, startup_guard_enabled: true
 
@@ -10,11 +10,9 @@ config :myelin,
     "screensaver" => %{enabled: true, idle: 60}
   }
 
-# Use Ringlogger as the logger backend and remove :console.
-# See https://ring-logger.hexdocs.pm/readme.html for more information on
-# configuring ring_logger.
-
-config :logger, backends: [RingLogger]
+# Default to not starting so that the console logger isn't started. See
+# runtime.exs for logger configuration.
+config :logger, :default_handler, false
 
 # Erlinit can be configured without a rootfs_overlay. See
 # https://github.com/nerves-project/erlinit/ for more information on

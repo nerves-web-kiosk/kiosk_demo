@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
 defmodule KioskDemo.MixProject do
   use Mix.Project
 
@@ -56,7 +58,8 @@ defmodule KioskDemo.MixProject do
 
       # Dependencies for all targets
       {:nerves, "~> 2.0.0-pre.4", runtime: false},
-      {:ring_logger, "~> 0.11.0"},
+      {:ring_logger, "~> 0.11.7"},
+      {:logger_backends, "~> 1.0"},
       {:toolshed, "~> 0.5"},
       {:muontrap, "~> 1.8"},
       {:myelin, "~> 0.1.1"},
