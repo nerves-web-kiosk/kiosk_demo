@@ -4,6 +4,15 @@
 -->
 # Changelog
 
+## v0.5.1
+
+* Changes
+  * Update Nerves systems to nerves_system_br 1.35.3 versions (eMudhra cert
+    removal)
+  * Use LoggerBackends to prevent logger deprecation warning
+  * Use Nerves 2.0.0-pre.4 for faster builds
+  * Bump all dependencies to their latest versions
+
 ## v0.5.0
 
 * Changes
